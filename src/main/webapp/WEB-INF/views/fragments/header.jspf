@@ -1,0 +1,54 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><c:out value="${pageTitle}"/> · SmartCity360</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/dashboard.css">
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="${pageContext.request.contextPath}/dashboard">
+            <span class="brand-mark">S</span>
+            <span><strong>SmartCity</strong><small>360 MANAGEMENT</small></span>
+        </a>
+        <div class="nav-caption">PLATFORM</div>
+        <nav class="nav-list" aria-label="Main navigation">
+            <a class="nav-item ${activeNav == 'dashboard' ? 'active' : ''}" href="${pageContext.request.contextPath}/dashboard"><span class="nav-icon">⌂</span>Overview</a>
+            <a class="nav-item ${activeNav == 'complaints' ? 'active' : ''}" href="${pageContext.request.contextPath}/complaints"><span class="nav-icon">◎</span>Complaints</a>
+            <c:if test="${sessionScope.authenticatedUser.roleName == 'CITY_MANAGER'}">
+                <a class="nav-item ${activeNav == 'security' ? 'active' : ''}" href="${pageContext.request.contextPath}/security-streams"><span class="nav-icon">◈</span>Security streams</a>
+                <a class="nav-item ${activeNav == 'zones' ? 'active' : ''}" href="${pageContext.request.contextPath}/smart-zones"><span class="nav-icon">⌘</span>Smart zones</a>
+                <a class="nav-item ${activeNav == 'streetlights' ? 'active' : ''}" href="${pageContext.request.contextPath}/streetlights"><span class="nav-icon">☼</span>Streetlights</a>
+                <a class="nav-item ${activeNav == 'policies' ? 'active' : ''}" href="${pageContext.request.contextPath}/policies"><span class="nav-icon">▤</span>City policies</a>
+                <a class="nav-item ${activeNav == 'users' ? 'active' : ''}" href="${pageContext.request.contextPath}/user-management"><span class="nav-icon">♙</span>User management</a>
+            </c:if>
+        </nav>
+        <div class="sidebar-bottom">
+            <span class="status-dot"></span>
+            <span>Operations console</span>
+            <span class="version-tag">DEMO</span>
+        </div>
+    </aside>
+    <div class="main-shell">
+        <header class="topbar">
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+            <div class="breadcrumb">Smart City <span>/</span> <strong><c:out value="${pageTitle}"/></strong></div>
+            <div class="topbar-right">
+                <span class="avatar"><c:out value="${sessionScope.authenticatedUser.initials}"/></span>
+                <span><c:out value="${sessionScope.authenticatedUser.fullName}"/> · <c:out value="${sessionScope.authenticatedUser.roleName}"/></span>
+                <form method="post" action="${pageContext.request.contextPath}/logout" class="logout-form">
+                    <input type="hidden" name="csrfToken" value="<c:out value='${sessionScope.csrfToken}'/>">
+                    <button class="button button-small button-quiet" type="submit">Sign out</button>
+                </form>
+            </div>
+        </header>
+        <main class="content">
+            <c:if test="${not empty error}">
+                <div class="alert alert-error" role="alert" aria-live="assertive"><span>!</span><c:out value="${error}"/><button type="button" class="alert-dismiss" data-alert-dismiss aria-label="Dismiss error">×</button></div>
+            </c:if>
+            <c:if test="${not empty success}">
+                <div class="alert alert-success" role="status" aria-live="polite"><span>✓</span><c:out value="${success}"/><button type="button" class="alert-dismiss" data-alert-dismiss aria-label="Dismiss notification">×</button></div>
+            </c:if>

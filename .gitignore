@@ -1,0 +1,68 @@
+target/
+build/
+dist/
+out/
+*.class
+
+### Maven wrapper ###
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.kotlin/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Local tooling and generated files ###
+.playwright-mcp/
+.gradle/
+*.log
+*.tmp
+*.temp
+*.swp
+*.pid
+hs_err_pid*
+
+### Local secrets and environment configuration ###
+.env
+.env.*
+!.env.example
+!**/.env.example
+local.properties
+**/local.properties
+*.local.properties
+*-local.properties
+secrets/
+*.pem
+*.p12
+*.pfx
+
+### Operating systems ###
+.DS_Store
+Thumbs.db
+Desktop.ini

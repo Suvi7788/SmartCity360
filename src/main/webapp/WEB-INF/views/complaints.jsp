@@ -3,7 +3,7 @@
 <c:set var="pageTitle" value="Complaint management"/>
 <c:set var="activeNav" value="complaints"/>
 <%@ include file="fragments/header.jspf" %>
-<section class="page-heading"><div><p class="eyebrow">CHAIN OF RESPONSIBILITY</p><h1>Complaint management</h1><p class="subheading">Route citizen reports by severity and keep a traceable escalation history.</p></div><span class="pattern-badge amber-badge">ESCALATION CHAIN</span></section>
+<section class="page-heading"><div><h1>Complaint management</h1><p class="subheading">Route citizen reports by severity and keep a traceable escalation history.</p></div></section>
 <section class="content-grid two-column">
     <article class="panel">
         <c:if test="${sessionScope.authenticatedUser.roleName == 'RESIDENT'}">

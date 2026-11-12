@@ -6,14 +6,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sign in · SmartCity360</title>
+    <link rel="icon" type="image/png" sizes="1254x1254" href="${pageContext.request.contextPath}/assets/images/smartcity360-icon.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/dashboard.css">
 </head>
 <body class="login-page">
 <main class="login-shell">
     <section class="login-card">
         <a class="brand login-brand" href="${pageContext.request.contextPath}/sign-in">
-            <span class="brand-mark">S</span>
-            <span><strong>SmartCity</strong><small>360 MANAGEMENT</small></span>
+            <img class="login-logo" src="${pageContext.request.contextPath}/assets/images/SmartCity360-Logo.png" alt="SmartCity360">
         </a>
         <p class="eyebrow">SECURE CITY OPERATIONS</p>
         <h1>Welcome back</h1>

@@ -30,10 +30,10 @@ public final class SecurityStreamService {
         List<String> requested = decorators == null ? List.of() : List.copyOf(decorators);
         if (requested.stream().anyMatch(name ->
                 !List.of("Compression", "Encryption", "Authentication").contains(name))) {
-            throw new IllegalArgumentException("Unsupported stream decorator");
+            throw new IllegalArgumentException("Unsupported meter processing option");
         }
         if (requested.stream().distinct().count() != requested.size()) {
-            throw new IllegalArgumentException("A stream decorator can only be selected once");
+            throw new IllegalArgumentException("A meter processing option can only be selected once");
         }
         List<String> selected = List.of("Compression", "Encryption", "Authentication").stream()
                 .filter(requested::contains).toList();
@@ -46,7 +46,7 @@ public final class SecurityStreamService {
                 case "Compression" -> new CompressionDecorator(processor);
                 case "Encryption" -> new EncryptionDecorator(processor);
                 case "Authentication" -> new AuthenticationDecorator(processor);
-                default -> throw new IllegalArgumentException("Unsupported stream decorator: " + decorator);
+                default -> throw new IllegalArgumentException("Unsupported meter processing option: " + decorator);
             };
         }
         String processed = Base64.getEncoder().encodeToString(processor.process(original.getBytes(StandardCharsets.UTF_8)));

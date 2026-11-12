@@ -58,7 +58,7 @@ public final class SecurityStreamServlet extends BaseServlet {
             reportUnexpected(request, exception);
         }
         if ("processed".equals(request.getParameter("success"))) {
-            request.setAttribute("success", "Meter stream processed and saved.");
+            request.setAttribute("success", "Meter reading processed and saved.");
         }
     }
 }

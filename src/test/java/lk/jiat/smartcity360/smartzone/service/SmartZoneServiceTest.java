@@ -93,6 +93,82 @@ class SmartZoneServiceTest {
     }
 
     @Test
+    void restoresParentAndChildSubtreesWithoutChangingUnrelatedZones() {
+        AtomicReference<List<Long>> affectedIds = new AtomicReference<>();
+        AtomicReference<ZoneOperation> recordedOperation = new AtomicReference<>();
+        AtomicReference<String> operationSummary = new AtomicReference<>();
+        LinkedHashMap<Long, ZoneRecord> persistedZones = new LinkedHashMap<>();
+        ZoneRepository repository = new ZoneRepository() {
+            @Override
+            public List<ZoneRecord> findAll() {
+                if (persistedZones.isEmpty()) {
+                    List.of(
+                            new ZoneRecord(1, null, ZoneType.CITY, "Metro", true, BigDecimal.ZERO),
+                            new ZoneRecord(2, 1L, ZoneType.DISTRICT, "North", true, BigDecimal.ZERO),
+                            new ZoneRecord(3, 2L, ZoneType.STREET, "Main", true, BigDecimal.ZERO),
+                            new ZoneRecord(4, 3L, ZoneType.BUILDING, "Library", true, BigDecimal.ZERO),
+                            new ZoneRecord(5, 1L, ZoneType.DISTRICT, "South", true, BigDecimal.ZERO),
+                            new ZoneRecord(6, 5L, ZoneType.STREET, "Broadway", true, BigDecimal.ZERO),
+                            new ZoneRecord(7, 6L, ZoneType.BUILDING, "Clinic", true, BigDecimal.ZERO))
+                            .forEach(zone -> persistedZones.put(zone.id(), zone));
+                }
+                return List.copyOf(persistedZones.values());
+            }
+
+            @Override
+            public long add(Long parentId, String type, String name, BigDecimal usageKwh) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void recordOperation(long zoneId, ZoneOperation operation, String summary,
+                                        List<Long> affectedZoneIds) {
+                recordedOperation.set(operation);
+                operationSummary.set(summary);
+                affectedIds.set(affectedZoneIds);
+                boolean powerOn = operation == ZoneOperation.RESTORE_POWER;
+                if (operation == ZoneOperation.SHUTDOWN_POWER || operation == ZoneOperation.RESTORE_POWER) {
+                    affectedZoneIds.forEach(id -> {
+                        ZoneRecord prior = persistedZones.get(id);
+                        persistedZones.put(id, new ZoneRecord(prior.id(), prior.parentId(), prior.type(),
+                                prior.name(), powerOn, prior.usageKwh()));
+                    });
+                }
+            }
+        };
+        SmartZoneService service = new SmartZoneService(repository);
+
+        service.execute(1, ZoneOperation.SHUTDOWN_POWER);
+
+        assertEquals(List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L), affectedIds.get());
+        assertTrue(persistedZones.values().stream().noneMatch(ZoneRecord::powerOn));
+
+        List<String> parentResults = service.execute(1, ZoneOperation.RESTORE_POWER);
+
+        assertEquals(List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L), affectedIds.get());
+        assertEquals(ZoneOperation.RESTORE_POWER, recordedOperation.get());
+        assertTrue(persistedZones.values().stream().allMatch(ZoneRecord::powerOn));
+        assertTrue(parentResults.stream().allMatch(line -> line.contains("power restored")));
+        assertTrue(operationSummary.get().contains("power restored"));
+
+        persistedZones.put(3L, withPower(persistedZones.get(3L), false));
+        persistedZones.put(4L, withPower(persistedZones.get(4L), false));
+        List<String> childResults = service.execute(3, ZoneOperation.RESTORE_POWER);
+
+        assertEquals(List.of(3L, 4L), affectedIds.get());
+        assertTrue(childResults.stream().allMatch(line -> line.contains("power restored")));
+        assertTrue(persistedZones.get(3L).powerOn());
+        assertTrue(persistedZones.get(4L).powerOn());
+        assertTrue(persistedZones.get(5L).powerOn());
+        assertTrue(persistedZones.get(6L).powerOn());
+        assertTrue(persistedZones.get(7L).powerOn());
+    }
+
+    private ZoneRecord withPower(ZoneRecord zone, boolean powerOn) {
+        return new ZoneRecord(zone.id(), zone.parentId(), zone.type(), zone.name(), powerOn, zone.usageKwh());
+    }
+
+    @Test
     void reportsPersistedUsageAndSupportsBuildingLevelOperations() {
         AtomicReference<List<Long>> affectedIds = new AtomicReference<>();
         AtomicReference<String> operationSummary = new AtomicReference<>();

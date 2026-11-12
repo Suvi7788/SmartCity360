@@ -5,7 +5,7 @@
 <%@ include file="fragments/header.jspf" %>
 <section class="page-heading">
     <div><p class="eyebrow">ACCOUNT ADMINISTRATION</p><h1>User management</h1><p class="subheading">Create accounts and manage roles, access, and password resets.</p></div>
-    <span class="pattern-badge">CITY MANAGER ONLY</span>
+    <span class="access-badge">CITY MANAGER ONLY</span>
 </section>
 <section class="content-grid two-column">
     <article class="panel">

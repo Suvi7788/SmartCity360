@@ -3,7 +3,7 @@
 <c:set var="pageTitle" value="Smart zones"/>
 <c:set var="activeNav" value="zones"/>
 <%@ include file="fragments/header.jspf" %>
-<section class="page-heading"><div><p class="eyebrow">COMPOSITE PATTERN</p><h1>Smart zones</h1><p class="subheading">Build a city hierarchy and apply simulated operations recursively to any node.</p></div><span class="pattern-badge blue-badge">COMPOSITE</span></section>
+<section class="page-heading"><div><h1>Smart Zones</h1><p class="subheading">Build a city hierarchy and apply simulated operations recursively to any node.</p></div></section>
 <section class="content-grid two-column zone-layout">
     <article class="panel">
         <div class="panel-heading"><div><p class="eyebrow">CITY HIERARCHY</p><h2>Zone tree</h2></div><span class="count-label"><c:out value="${empty zoneRows ? 0 : zoneRows.size()}"/> nodes</span></div>
@@ -20,7 +20,7 @@
                         <form method="post" action="${pageContext.request.contextPath}/smart-zones">
                             <input type="hidden" name="csrfToken" value="<c:out value='${sessionScope.csrfToken}'/>">
                             <input type="hidden" name="action" value="execute"><input type="hidden" name="zoneId" value="<c:out value='${row.id}'/>">
-                            <select name="operation" aria-label="Operation for <c:out value='${row.name}'/>" data-zone-operation><option value="SHUTDOWN_POWER">Shutdown power</option><option value="REPORT_USAGE">Report usage</option></select>
+                            <select name="operation" aria-label="Operation for <c:out value='${row.name}'/>" data-zone-operation><option value="SHUTDOWN_POWER">Shutdown power</option><option value="RESTORE_POWER">Restore power</option><option value="REPORT_USAGE">Report usage</option></select>
                             <button class="button button-small button-quiet" type="submit">Run</button>
                         </form>
                     </div>

@@ -36,10 +36,13 @@ public final class ZoneLeaf implements ZoneComponent {
     }
 
     static String executeFor(ZoneRecord record, ZoneOperation operation) {
-        if (operation == ZoneOperation.SHUTDOWN_POWER) {
-            return record.type() + " " + record.name()
+        return switch (operation) {
+            case SHUTDOWN_POWER -> record.type() + " " + record.name()
                     + (record.powerOn() ? ": power shut down" : ": power already shut down");
-        }
-        return record.type() + " " + record.name() + ": recorded usage " + record.usageKwh() + " kWh";
+            case RESTORE_POWER -> record.type() + " " + record.name()
+                    + (record.powerOn() ? ": power already on" : ": power restored");
+            case REPORT_USAGE -> record.type() + " " + record.name()
+                    + ": recorded usage " + record.usageKwh() + " kWh";
+        };
     }
 }

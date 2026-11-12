@@ -3,13 +3,13 @@
 <c:set var="pageTitle" value="Streetlight management"/>
 <c:set var="activeNav" value="streetlights"/>
 <%@ include file="fragments/header.jspf" %>
-<section class="page-heading"><div><p class="eyebrow">FLYWEIGHT PATTERN</p><h1>Streetlight management</h1><p class="subheading">Generate large fleets while reusing immutable configurations across unique light instances.</p></div><span class="pattern-badge green-badge">FLYWEIGHT</span></section>
+<section class="page-heading"><div><h1>Streetlight management</h1><p class="subheading">Generate large fleets while reusing immutable configurations across unique light instances.</p></div></section>
 <section class="kpi-grid three-kpis">
     <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon teal">☼</span><span class="kpi-label">TOTAL INSTANCES</span></div><strong><c:out value="${totalLights}"/></strong><small>Persisted streetlights</small></article>
     <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon blue">◈</span><span class="kpi-label">SHARED CONFIGS</span></div><strong><c:out value="${uniqueConfigurations}"/></strong><small>Unique persisted configurations</small></article>
     <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon green">↗</span><span class="kpi-label">IN-MEMORY POOL</span></div><strong><c:out value="${cachedConfigurations}"/></strong><small>Configs interned by this app instance</small></article>
 </section>
-<section class="content-grid two-column">
+<section class="content-grid">
     <article class="panel">
         <div class="panel-heading"><div><p class="eyebrow">BULK SIMULATION</p><h2>Create a fleet</h2></div></div>
         <form method="post" action="${pageContext.request.contextPath}/streetlights" class="form-stack" data-bulk-form data-loading-label="Creating streetlights…">
@@ -25,11 +25,6 @@
             <label>Sensor profile<select name="sensorProfile"><option>Standard</option><option>Traffic-aware</option><option>Pedestrian-aware</option></select></label>
             <button class="button button-primary" type="submit">Create light instances <span>→</span></button>
         </form>
-    </article>
-    <article class="panel info-panel">
-        <p class="eyebrow">SHARED VS. EXTRINSIC STATE</p><h2>One config, many locations</h2>
-        <div class="state-comparison"><div><span class="state-label">SHARED · FLYWEIGHT</span><strong>Wattage · Brightness · Temperature · Sensor</strong></div><div><span class="state-label">UNIQUE · INSTANCE</span><strong>Light ID · Street location · Zone · Status</strong></div></div>
-        <div class="callout"><strong>Factory behavior</strong><p>The thread-safe factory interns immutable configurations in memory. MySQL also enforces a unique configuration key, while each light stores only its unique location data and a configuration reference.</p></div>
     </article>
 </section>
 <section class="panel table-panel">

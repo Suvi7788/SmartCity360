@@ -3,7 +3,7 @@
 <c:set var="pageTitle" value="City policies"/>
 <c:set var="activeNav" value="policies"/>
 <%@ include file="fragments/header.jspf" %>
-<section class="page-heading"><div><p class="eyebrow">INTERPRETER PATTERN</p><h1>City policies</h1><p class="subheading">Define a small, validated policy language and evaluate it against supplied city data.</p></div><span class="pattern-badge violet-badge">INTERPRETER</span></section>
+<section class="page-heading"><div><h1>City policies</h1><p class="subheading">Define a small, validated policy language and evaluate it against supplied city data.</p></div></section>
 <section class="content-grid two-column">
     <article class="panel">
         <div class="panel-heading"><div><p class="eyebrow">POLICY EDITOR</p><h2>Create a policy</h2></div></div>

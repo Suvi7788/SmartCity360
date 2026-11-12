@@ -138,16 +138,17 @@ public final class JdbcZoneRepository implements ZoneRepository {
 
     @Override
     public void recordOperation(long zoneId, ZoneOperation operation, String summary, List<Long> affectedZoneIds) {
-        String updateSql = "UPDATE smart_zone SET power_on = FALSE WHERE id = ?";
+        String updateSql = "UPDATE smart_zone SET power_on = ? WHERE id = ?";
         String insertSql = "INSERT INTO zone_operation (root_zone_id, operation_type, status, result_summary) " +
                 "VALUES (?, ?, 'COMPLETED', ?)";
         try (Connection connection = ConnectionProvider.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                if (operation == ZoneOperation.SHUTDOWN_POWER) {
+                if (operation == ZoneOperation.SHUTDOWN_POWER || operation == ZoneOperation.RESTORE_POWER) {
                     try (PreparedStatement update = connection.prepareStatement(updateSql)) {
                         for (Long affectedId : affectedZoneIds) {
-                            update.setLong(1, affectedId);
+                            update.setBoolean(1, operation == ZoneOperation.RESTORE_POWER);
+                            update.setLong(2, affectedId);
                             update.addBatch();
                         }
                         update.executeBatch();

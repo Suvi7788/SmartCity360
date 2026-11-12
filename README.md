@@ -12,7 +12,7 @@ SmartCity360 is a Java 17 MVC web application packaged as a WAR for Payara Serve
 
 ## Database and Payara
 
-1. Create a MySQL database named `smartcity360` and run [`src/main/resources/db/schema.sql`](src/main/resources/db/schema.sql). For an existing database, apply the migrations in order: V2 adds persisted zone power and usage state; V3 adds a root-safe sibling-name unique constraint (check for duplicate root-city names first); V4 adds authentication and role data.
+1. Create a MySQL database named `smartcity360` and run [`src/main/resources/db/schema.sql`](src/main/resources/db/schema.sql). For an existing database, apply the migrations in order: V2 adds persisted zone power and usage state; V3 adds a root-safe sibling-name unique constraint (check for duplicate root-city names first); V4 adds authentication and role data; V5 adds the restore-power operation type to zone history.
 2. Install MySQL Connector/J where Payara's JDBC connection pool can load it (for example, in the Payara domain `lib` directory), then restart the domain.
 3. In the Payara Administration Console, create a MySQL JDBC connection pool with URL, database username, and password supplied through the server configuration. Create the JDBC resource `jdbc/SmartCity360` for that pool. The application looks it up as `java:comp/env/jdbc/SmartCity360`.
 4. Build and deploy `target/SmartCity360.war` to Payara. The welcome route is `/dashboard`.
